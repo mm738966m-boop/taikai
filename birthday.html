@@ -1,0 +1,143 @@
+<!-- ============================================================
+  パーソナリティ お誕生日 登録フォーム
+  （勝手にお祝いVoicyライブ用 / 投稿する・しない自由）
+  入力 → 確認 → 完了 の3画面（自己完結HTML）
+  ※ 退会届フォームと同じ「自己完結HTML → GASでスプシ集計」方式
+============================================================ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>お誕生日 登録フォーム</title>
+</head>
+<body>
+<div id="bd-root">
+<style>
+  #bd-root{--bd-accent:#ff7aa2;--bd-accent-d:#e85586;--bd-accent2:#ffb347;--bd-bg:#fff5f7;--bd-card:#ffffff;--bd-line:#f0dce2;--bd-text:#3a2c30;--bd-sub:#8a777c;--bd-soft:#fff0f4;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,sans-serif;color:var(--bd-text);background:linear-gradient(160deg,#fff5f7 0%,#fdf3ff 100%);padding:24px 12px;min-height:100vh;margin:0;}
+  #bd-root *{box-sizing:border-box;}
+  #bd-root .bd-card{background:var(--bd-card);border:1px solid var(--bd-line);border-radius:18px;padding:30px 24px;max-width:560px;margin:0 auto;box-shadow:0 12px 40px rgba(232,85,134,.10);}
+  #bd-root .bd-head{text-align:center;padding-bottom:16px;margin-bottom:18px;}
+  #bd-root .bd-head .emoji{font-size:34px;line-height:1;}
+  #bd-root .bd-head small{display:block;font-size:13px;color:var(--bd-sub);letter-spacing:.06em;margin-top:8px;}
+  #bd-root .bd-head h1{font-size:22px;font-weight:700;margin:6px 0 0;background:linear-gradient(90deg,var(--bd-accent-d),var(--bd-accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  #bd-root .bd-lead{background:var(--bd-soft);border-radius:12px;padding:14px 16px;margin-bottom:22px;font-size:13px;line-height:1.7;color:var(--bd-sub);}
+  #bd-root .bd-lead b{color:var(--bd-accent-d);}
+  #bd-root label.bd-l{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px;}
+  #bd-root .req{color:var(--bd-accent-d);font-size:11px;border:1px solid var(--bd-accent);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:1px;}
+  #bd-root .opt{color:var(--bd-sub);font-size:11px;border:1px solid var(--bd-line);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:1px;}
+  #bd-root .bd-field{margin-bottom:17px;}
+  #bd-root .bd-hint{font-size:12px;color:var(--bd-sub);margin:4px 0 0;}
+  #bd-root input,#bd-root textarea{width:100%;font-size:15px;font-family:inherit;padding:11px 13px;border:1px solid var(--bd-line);border-radius:10px;background:#fff;color:var(--bd-text);}
+  #bd-root input:focus,#bd-root textarea:focus{outline:none;border-color:var(--bd-accent);box-shadow:0 0 0 3px rgba(255,122,162,.18);}
+  #bd-root button{font-family:inherit;cursor:pointer;border-radius:10px;font-size:15px;}
+  #bd-root .bd-btn-main{width:100%;margin-top:8px;padding:15px;font-weight:700;color:#fff;border:none;background:linear-gradient(90deg,var(--bd-accent),var(--bd-accent-d));box-shadow:0 8px 20px rgba(232,85,134,.30);}
+  #bd-root .bd-btn-main:hover{filter:brightness(1.04);}
+  #bd-root .bd-btn-sub{flex:1;padding:14px;background:#fff;border:1px solid var(--bd-line);color:var(--bd-text);}
+  #bd-root .bd-btn-go{flex:2;padding:14px;font-weight:700;color:#fff;border:none;background:linear-gradient(90deg,var(--bd-accent),var(--bd-accent-d));}
+  #bd-root .bd-err{display:none;color:var(--bd-accent-d);font-size:13px;margin:12px 0 0;background:var(--bd-soft);border-radius:8px;padding:10px 12px;}
+  #bd-root table.bd-sum{width:100%;font-size:14px;border-collapse:collapse;}
+  #bd-root table.bd-sum td{padding:11px 10px;border-bottom:1px solid var(--bd-line);vertical-align:top;line-height:1.6;}
+  #bd-root table.bd-sum td.k{color:var(--bd-sub);white-space:nowrap;width:36%;font-weight:600;}
+  #bd-root .bd-done{text-align:center;padding:14px 0;}
+  #bd-root .bd-done .circle{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--bd-accent),var(--bd-accent2));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:32px;color:#fff;}
+  #bd-root .bd-done h2{font-size:20px;font-weight:700;margin:0 0 10px;}
+  #bd-root .bd-done p{font-size:14px;color:var(--bd-sub);line-height:1.9;margin:0;}
+</style>
+
+<div class="bd-card">
+  <div class="bd-head"><span class="emoji">🎂🎉</span><small>勝手にお祝いVoicyライブ</small><h1>パーソナリティ お誕生日登録</h1></div>
+
+  <div id="bd-step1">
+    <div class="bd-lead">
+      パーソナリティのみなさんの誕生日を、<b>みんなで勝手にお祝い</b>するための登録フォームです🎈<br>
+      参加は<b>自由</b>。書ける項目だけでOK！いただいた内容はライブ内でうれしく使わせてもらいます。
+    </div>
+
+    <div class="bd-field">
+      <label class="bd-l">パーソナリティ名<span class="req">必須</span></label>
+      <input type="text" id="f_name" placeholder="例）ながたか">
+    </div>
+    <div class="bd-field">
+      <label class="bd-l">チャンネルURL<span class="req">必須</span></label>
+      <input type="url" id="f_url" placeholder="https://voicy.jp/channel/...">
+      <p class="bd-hint">Voicy等のチャンネルページのURLを貼ってください</p>
+    </div>
+    <div class="bd-field">
+      <label class="bd-l">生年月日<span class="req">必須</span></label>
+      <input type="date" id="f_bd">
+      <p class="bd-hint">お祝いはお誕生日（月日）に合わせます🎂</p>
+    </div>
+    <div class="bd-field">
+      <label class="bd-l">プレゼントに欲しいもの<span class="opt">任意</span></label>
+      <input type="text" id="f_gift" placeholder="例）静かなカフェでの読書時間／〇〇のコーヒー豆">
+    </div>
+    <div class="bd-field">
+      <label class="bd-l">誕生日の思い出<span class="opt">任意</span></label>
+      <textarea id="f_memory" rows="3" placeholder="忘れられない誕生日エピソードがあればぜひ✏️"></textarea>
+    </div>
+    <div class="bd-field">
+      <label class="bd-l">ひとこと<span class="opt">任意</span></label>
+      <textarea id="f_word" rows="2" placeholder="リスナーさんへ、みんなへ、ひとことどうぞ📣"></textarea>
+    </div>
+
+    <p class="bd-err" id="bd-err"></p>
+    <button class="bd-btn-main" id="bd-next">確認画面へ →</button>
+  </div>
+
+  <div id="bd-step2" style="display:none;">
+    <p style="font-size:15px;font-weight:700;text-align:center;margin:0 0 16px;">この内容で登録します🎁<br>よろしいですか？</p>
+    <table class="bd-sum" id="bd-summary"></table>
+    <div style="display:flex;gap:10px;margin-top:22px;">
+      <button class="bd-btn-sub" id="bd-back">← 修正する</button>
+      <button class="bd-btn-go" id="bd-submit">この内容で登録する</button>
+    </div>
+  </div>
+
+  <div id="bd-step3" style="display:none;">
+    <div class="bd-done">
+      <div class="circle">🎉</div>
+      <h2>登録ありがとうございます！</h2>
+      <p>お誕生日が近づいたら、みんなで勝手にお祝いさせてもらいます🎂<br>当日のライブをどうぞお楽しみに！</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ▼ GASのWebアプリ(/exec)URLをここに貼ると、スプシへ自動で集計されます。
+     空のままでも動作確認は可能（送信せず完了画面に進みます）。
+     GAS側の doPost(e) で JSON.parse(e.postData.contents) を受け取り、
+     シートに appendRow すればOK。退会届フォームと同じ方式です。 */
+  var SUBMIT_URL = "https://script.google.com/macros/s/AKfycbxGeVLfMY1N34EcET5CkXOdgiEGROTz5xDYI_0t9Qnezuc-WxOCe6SKtfq1iXTmY9iH7A/exec";
+  var d=document;
+  function v(id){return (d.getElementById(id).value||'').trim();}
+  function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+  function nl(s){return esc(s).replace(/\n/g,'<br>');}
+  d.getElementById('bd-next').onclick=function(){
+    var err=d.getElementById('bd-err'),miss=[];
+    [['f_name','パーソナリティ名'],['f_url','チャンネルURL'],['f_bd','生年月日']].forEach(function(f){if(!v(f[0]))miss.push(f[1]);});
+    if(miss.length){err.style.display='block';err.textContent='未入力があります：'+miss.join('、');window.scrollTo(0,0);return;}
+    err.style.display='none';
+    var rows=[['パーソナリティ名',v('f_name')],['チャンネルURL',v('f_url')],['生年月日',v('f_bd')]];
+    if(v('f_gift'))rows.push(['プレゼントに欲しいもの',v('f_gift')]);
+    if(v('f_memory'))rows.push(['誕生日の思い出',v('f_memory')]);
+    if(v('f_word'))rows.push(['ひとこと',v('f_word')]);
+    d.getElementById('bd-summary').innerHTML=rows.map(function(r){return '<tr><td class="k">'+r[0]+'</td><td>'+nl(r[1])+'</td></tr>';}).join('');
+    d.getElementById('bd-step1').style.display='none';d.getElementById('bd-step2').style.display='block';
+    window.scrollTo(0,0);
+  };
+  d.getElementById('bd-back').onclick=function(){d.getElementById('bd-step2').style.display='none';d.getElementById('bd-step1').style.display='block';window.scrollTo(0,0);};
+  d.getElementById('bd-submit').onclick=function(){
+    var btn=this; btn.disabled=true; btn.textContent='送信中…';
+    var data={パーソナリティ名:v('f_name'),チャンネルURL:v('f_url'),生年月日:v('f_bd'),プレゼントに欲しいもの:v('f_gift'),誕生日の思い出:v('f_memory'),ひとこと:v('f_word')};
+    function done(){d.getElementById('bd-step2').style.display='none';d.getElementById('bd-step3').style.display='block';window.scrollTo(0,0);}
+    if(SUBMIT_URL){
+      fetch(SUBMIT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}).then(done).catch(function(){done();});
+    }else{ done(); }
+  };
+})();
+</script>
+</div>
+</body>
+</html>
