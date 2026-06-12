@@ -80,6 +80,10 @@
       <label class="bd-l">ひとこと<span class="opt">任意</span></label>
       <textarea id="f_word" rows="2" placeholder="リスナーさんへ、みんなへ、ひとことどうぞ📣"></textarea>
     </div>
+    <div class="bd-field">
+      <label class="bd-l">寅の会リスナーにひとこと<span class="opt">任意</span></label>
+      <textarea id="f_tora" rows="2" placeholder="寅の会のリスナーさんへ、ひとことどうぞ🐯"></textarea>
+    </div>
 
     <p class="bd-err" id="bd-err"></p>
     <button class="bd-btn-main" id="bd-next">確認画面へ →</button>
@@ -123,6 +127,7 @@
     if(v('f_gift'))rows.push(['プレゼントに欲しいもの',v('f_gift')]);
     if(v('f_memory'))rows.push(['誕生日の思い出',v('f_memory')]);
     if(v('f_word'))rows.push(['ひとこと',v('f_word')]);
+    if(v('f_tora'))rows.push(['寅の会リスナーにひとこと',v('f_tora')]);
     d.getElementById('bd-summary').innerHTML=rows.map(function(r){return '<tr><td class="k">'+r[0]+'</td><td>'+nl(r[1])+'</td></tr>';}).join('');
     d.getElementById('bd-step1').style.display='none';d.getElementById('bd-step2').style.display='block';
     window.scrollTo(0,0);
@@ -130,7 +135,7 @@
   d.getElementById('bd-back').onclick=function(){d.getElementById('bd-step2').style.display='none';d.getElementById('bd-step1').style.display='block';window.scrollTo(0,0);};
   d.getElementById('bd-submit').onclick=function(){
     var btn=this; btn.disabled=true; btn.textContent='送信中…';
-    var data={パーソナリティ名:v('f_name'),チャンネルURL:v('f_url'),生年月日:v('f_bd'),プレゼントに欲しいもの:v('f_gift'),誕生日の思い出:v('f_memory'),ひとこと:v('f_word')};
+    var data={パーソナリティ名:v('f_name'),チャンネルURL:v('f_url'),生年月日:v('f_bd'),プレゼントに欲しいもの:v('f_gift'),誕生日の思い出:v('f_memory'),ひとこと:v('f_word'),寅の会リスナーにひとこと:v('f_tora')};
     function done(){d.getElementById('bd-step2').style.display='none';d.getElementById('bd-step3').style.display='block';window.scrollTo(0,0);}
     if(SUBMIT_URL){
       fetch(SUBMIT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}).then(done).catch(function(){done();});
