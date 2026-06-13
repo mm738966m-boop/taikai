@@ -64,9 +64,12 @@
       <p class="bd-hint">Voicy等のチャンネルページのURLを貼ってください</p>
     </div>
     <div class="bd-field">
-      <label class="bd-l">生年月日<span class="req">必須</span></label>
-      <input type="date" id="f_bd">
-      <p class="bd-hint">お祝いはお誕生日（月日）に合わせます🎂</p>
+      <label class="bd-l">誕生日<span class="req">必須</span></label>
+      <div style="display:flex;gap:10px;">
+        <select id="f_bm"><option value="">月</option></select>
+        <select id="f_bdd"><option value="">日</option></select>
+      </div>
+      <p class="bd-hint">お祝いはお誕生日（月日）に合わせます🎂 ※年は聞きません</p>
     </div>
     <div class="bd-field">
       <label class="bd-l">プレゼントに欲しいもの<span class="opt">任意</span></label>
@@ -115,15 +118,23 @@
      シートに appendRow すればOK。退会届フォームと同じ方式です。 */
   var SUBMIT_URL = "https://script.google.com/macros/s/AKfycbxGeVLfMY1N34EcET5CkXOdgiEGROTz5xDYI_0t9Qnezuc-WxOCe6SKtfq1iXTmY9iH7A/exec";
   var d=document;
+  (function(){
+    var bm=d.getElementById('f_bm');
+    for(var m=1;m<=12;m++){var o=d.createElement('option');o.value=m;o.textContent=m+'月';bm.appendChild(o);}
+    var bdd=d.getElementById('f_bdd');
+    for(var dy=1;dy<=31;dy++){var o2=d.createElement('option');o2.value=dy;o2.textContent=dy+'日';bdd.appendChild(o2);}
+  })();
   function v(id){return (d.getElementById(id).value||'').trim();}
+  function bday(){return (v('f_bm')&&v('f_bdd'))?(v('f_bm')+'月'+v('f_bdd')+'日'):'';}
   function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
   function nl(s){return esc(s).replace(/\n/g,'<br>');}
   d.getElementById('bd-next').onclick=function(){
     var err=d.getElementById('bd-err'),miss=[];
-    [['f_name','パーソナリティ名'],['f_url','チャンネルURL'],['f_bd','生年月日']].forEach(function(f){if(!v(f[0]))miss.push(f[1]);});
+    [['f_name','パーソナリティ名'],['f_url','チャンネルURL']].forEach(function(f){if(!v(f[0]))miss.push(f[1]);});
+    if(!bday())miss.push('誕生日');
     if(miss.length){err.style.display='block';err.textContent='未入力があります：'+miss.join('、');window.scrollTo(0,0);return;}
     err.style.display='none';
-    var rows=[['パーソナリティ名',v('f_name')],['チャンネルURL',v('f_url')],['生年月日',v('f_bd')]];
+    var rows=[['パーソナリティ名',v('f_name')],['チャンネルURL',v('f_url')],['誕生日',bday()]];
     if(v('f_gift'))rows.push(['プレゼントに欲しいもの',v('f_gift')]);
     if(v('f_memory'))rows.push(['誕生日の思い出',v('f_memory')]);
     if(v('f_word'))rows.push(['ひとこと',v('f_word')]);
@@ -135,7 +146,7 @@
   d.getElementById('bd-back').onclick=function(){d.getElementById('bd-step2').style.display='none';d.getElementById('bd-step1').style.display='block';window.scrollTo(0,0);};
   d.getElementById('bd-submit').onclick=function(){
     var btn=this; btn.disabled=true; btn.textContent='送信中…';
-    var data={パーソナリティ名:v('f_name'),チャンネルURL:v('f_url'),生年月日:v('f_bd'),プレゼントに欲しいもの:v('f_gift'),誕生日の思い出:v('f_memory'),ひとこと:v('f_word'),寅の会リスナーにひとこと:v('f_tora')};
+    var data={パーソナリティ名:v('f_name'),チャンネルURL:v('f_url'),誕生日:bday(),プレゼントに欲しいもの:v('f_gift'),誕生日の思い出:v('f_memory'),ひとこと:v('f_word'),寅の会リスナーにひとこと:v('f_tora')};
     function done(){d.getElementById('bd-step2').style.display='none';d.getElementById('bd-step3').style.display='block';window.scrollTo(0,0);}
     if(SUBMIT_URL){
       fetch(SUBMIT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)}).then(done).catch(function(){done();});
